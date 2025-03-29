@@ -1,6 +1,17 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from 'cookie-parser';
+import rateLimit from "express-rate-limit"
+
+
+const limiter = rateLimit({
+    windowMs: 60 * 1000,  
+    max: 100,  
+    message: "Too many requests from this IP, please try again later.",
+    standardHeaders: true,  
+    legacyHeaders: false,  // Disable `X-RateLimit-*` headers
+});
+
 
 
 
@@ -18,6 +29,7 @@ app.use(express.urlencoded({
 app.use(express.static("public"))
 
 app.use(cookieParser());  // ✅ Enables reading cookies from requests
+app.use(limiter);  // Apply to all routes
 
 //Routes
 
